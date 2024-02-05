@@ -1,12 +1,12 @@
 const state = {
   TaskList: [
-    {
-      id: "2020202020",
-      url: "https://wallpapercave.com/wp/wp5493583.jpg",
-      title: "Bike",
-      description: "This is an Description",
-      type: "test badge!",
-    },
+    // {
+    //   id: "2020202020",
+    //   url: "https://wallpapercave.com/wp/wp5493583.jpg",
+    //   title: "Bike",
+    //   description: "This is an Description",
+    //   type: "test badge!",
+    // },
   ],
 };
 
@@ -16,13 +16,13 @@ const TaskModal = document.querySelector(".TaskShowModal");
 
 const HtmlTaskContent = ({ id, title, description, type, url }) => `
              <div class="col-md-6 col-lg-4 mt-3" id=${id} key=${id}>
-                <div class="card shadow-sm Task_Card">
-                    <div class="Task_Header card-header  d-flex justify-content-end gap-2">
-                        <button type="button" class="btn btn-outline-info mr-3" id=${id}>
-                            <i class="fa-solid fa-pencil " name=${id}></i>
+                <div class="card shadow-sm Task_Card"> 
+                     <div class="Task_Header card-header  d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-outline-info mr-3" onclick="editTask.apply(this,arguments)" id=${id}>
+                            <i class="fa-solid fa-pencil " id=${id}></i>
                         </button>
-                        <button type="button" class="btn btn-outline-danger" data-bs-target="#TaskCardModal" data-bs-toggle="modal" id=${id}>
-                            <i class="fa-solid fa-trash " name=${id}></i>
+                        <button type="button" class="btn btn-outline-danger"  onclick="deleteTask.apply(this,arguments)" id=${id}>
+                            <i class="fa-solid fa-trash " id=${id}></i>
                         </button>
                     </div>
 
@@ -39,7 +39,7 @@ const HtmlTaskContent = ({ id, title, description, type, url }) => `
                         </div>
 
                     <div class="card-footer">
-                        <button type="button" class="btn btn-outline-primary float-right data-bs-target="#TaskCardModal" data-bs-toggle="modal">Open Pages</button>
+                        <button type="button" class="btn btn-outline-primary" float-right data-bs-target="#TaskCardModal" data-bs-toggle="modal" onclick="openTask()" id=${id}>Open Pages</button>
                     </div>
                 </div>
             </div>
@@ -100,8 +100,98 @@ const handleSubmit = () => {
 
 const openTask = (e) => {
   if (!e) e = window.event;
-  console.log(e.target.id);
+
   const getTask = state.TaskList.find(({ id }) => id === e.target.id);
-  console.log(getTask);
   TaskModal.innerHTML = HtmlModalContent(getTask);
 };
+
+const deleteTask = (e) => {
+  if (!e) e = window.event;
+
+  var getTaskType = e.target.tagName;
+  var getTaskId = e.target.id;
+  if (getTaskType === "BUTTON") {
+    e.target.parentNode.parentNode.parentNode.parentNode.removeChild(
+      e.target.parentNode.parentNode.parentNode
+    );
+  }
+  if (getTaskType === "I") {
+    e.target.parentNode.parentNode.parentNode.parentNode.parentNode.removeChild(
+      e.target.parentNode.parentNode.parentNode.parentNode
+    );
+  }
+
+  const getTask = state.TaskList.filter(({ id }) => id !== getTaskId);
+  state.TaskList = getTask;
+  updateLocalStorage();
+};
+
+const editTask = (e) => {
+  if (!e) e = window.event;
+  const getTaskTag = e.target.tagName;
+
+  let parentNode;
+  let TaskTitle;
+  let TaskType;
+  let TaskDesc;
+  let Submitbtn;
+  console.log(getTaskTag);
+  if (getTaskTag === "BUTTON") {
+    parentNode = e.target.parentNode.parentNode;
+  } else {
+    parentNode = e.target.parentNode.parentNode.parentNode;
+  }
+  console.log(parentNode.childNodes);
+  TaskTitle = parentNode.childNodes[5];
+  TaskDesc = parentNode.childNodes[7];
+  TaskType = parentNode.childNodes[9].childNodes[1];
+  Submitbtn = parentNode.childNodes[11].childNodes[1];
+  TaskTitle.setAttribute("contenteditable", "true");
+  TaskType.setAttribute("contenteditable", "true");
+  TaskDesc.setAttribute("contenteditable", "true");
+  Submitbtn.innerHTML = "Save Changes";
+  Submitbtn.setAttribute("onclick", "saveEdit.apply(this,arguments)");
+  Submitbtn.removeAttribute("data-bs-target");
+  Submitbtn.removeAttribute("data-bs-toggle");
+};
+
+const saveEdit = (e) => {
+  if (!e) e = window.event;
+  const targetId = e.target.id;
+  const parentNode = e.target.parentNode.parentNode;
+  const TaskTitle = parentNode.childNodes[5];
+  const TaskDesc = parentNode.childNodes[7];
+  const TaskType = parentNode.childNodes[9].childNodes[1];
+  const Submitbtn = parentNode.childNodes[11].childNodes[1];
+  const TaskData = {
+    title: TaskTitle.innerHTML,
+    desc: TaskDesc.innerHTML,
+    type: TaskType.innerHTML,
+  };
+  let stateCopy = state.TaskList;
+
+  stateCopy = stateCopy.map((task) =>
+    task.id === targetId
+      ? {
+          id: targetId,
+          url: task.url,
+          title: TaskData.title,
+          description: TaskData.desc,
+          type: TaskData.type,
+        }
+      : task
+  );
+  console.log(stateCopy);
+  state.TaskList = stateCopy;
+  updateLocalStorage();
+
+  TaskTitle.setAttribute("contenteditable", "false");
+  TaskType.setAttribute("contenteditable", "false");
+  TaskDesc.setAttribute("contenteditable", "false");
+  Submitbtn.innerHTML = "Open Pages";
+  Submitbtn.setAttribute("data-bs-target", "#TaskCardModal");
+  Submitbtn.setAttribute("data-bs-toggle", "modal");
+  Submitbtn.setAttribute("onclick", "openTask.apply(this,arguments)");
+};
+
+
