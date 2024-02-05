@@ -1,0 +1,29 @@
+.Test1{
+    background-color: blue;
+}
+.Test2{
+    background-color: red;
+}
+*{
+    padding: 0;
+    margin :0;
+}
+body{
+    background-color: #ebf2ff !important;
+}
+
+.AddBtn_small_Screen{
+    position: fixed;
+    bottom:0;
+    right:0;
+    padding: 15px 12px;
+    background-color: white;
+    /* width: 100%; */
+    z-index: 3;
+    display:flex !important;
+}
+@media screen and (min-width:800px){
+    .AddBtn_small_Screen{
+        display: none !important;
+    }
+}

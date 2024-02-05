@@ -1,16 +1,139 @@
-<!Doctype html>
-<html>
-    <head lang="en">
-        <meta charset="utf-8" >
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Tasky App</title>
-        <link rel="stylesheet" href="style.css" />
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    </head>
-    <body>
-        <script src="script.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
-    </body>
+<!DOCTYPE html>
+<html lang="en">
+      <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Tasky App</title>
+            <!-- Style  -->
+            <link rel="stylesheet" href="style.css" />
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+      </head>
+
+      <body onload="loadinitialData()">
+
+              <!-- Button For smaller screen  -->
+              <button class="btn btn-primary AddBtn_small_Screen" type="submit" data-bs-target="#AddNewModal" data-bs-toggle="modal">
+                              <i class="fa-light fa-plus me-2"></i>Add New Item
+              </button>
+
+              <!-- Add new Modal -->
+              <div class="modal fade" id="AddNewModal" tabindex="-1" aria-labelledby="AddNewModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="AddNewModalLabel">Modal title</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                  <!-- Form  -->
+                    <form>
+                        <!-- Image  -->
+                        <div class="mb-3">
+                          <label for="imageUrl" class="form-label">Image URL</label>
+                          <input type="url" class="form-control" id="imageUrl" aria-describedby="imageDesc" placeholder="https://Xeno/image.png">
+                          <div id="imageDesc" class="form-text">Its is a Optional field for you...</div>
+                        </div>
+
+                        <!-- Task Title -->
+                        <div class="mb-3">
+                          <label for="TaskTitle" class="form-label">Task Title</label>
+                          <input type="text" class="form-control" id="TaskTitle"  placeholder="Task Title!" required>
+                        </div>
+
+                        <!-- Task Type  -->
+                        <div class="mb-3">
+                          <label for="TaskType" class="form-label">Task Type</label>
+                          <input type="text" class="form-control" id="TaskType"  placeholder="Task Type!" required>
+                        </div>
+
+                        <!-- Task Description  -->
+                        <div class="mb-3">
+                          <label for="TaskDesc" class="form-label">Task Type</label>
+                          <textarea type="text" class="form-control" id="TaskDesc"  placeholder="Task Description..." required rows="3" ></textarea>
+                        </div>
+                        
+                    </form>
+
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary" onclick="handleSubmit()">Save changes</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Task Modal  -->
+              <!-- Button trigger modal -->
+              <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#TaskCardModal"  >
+                Launch demo modal
+              </button> -->
+
+              <!-- Task Modal Container -->
+              <div class="modal fade" id="TaskCardModal" tabindex="-1" aria-labelledby="TaskCardModelLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="TaskCardModalLabel">Task Details</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body TaskShowModal">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Navbar  -->
+              <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid d-flex justify-content-between">
+                  <a class="navbar-brand" href="#">Tasky App</a>
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                      </li>
+                    </ul>
+                            <button class="btn btn-primary" type="submit" data-bs-target="#AddNewModal" data-bs-toggle="modal">
+                              <i class="fa-light fa-plus me-2"></i>Add New Item
+                            </button>
+                </div>
+              </nav>
+              
+              <!-- Body of the App  -->
+              <div class="container">
+
+                <!-- searchbar -->
+                <section class="mt-5">
+                  <div class="row  justify-content-center">
+                    <div class="col-md-6">
+                      <div class="input-group flex-nowrap shadow-lg rounded">
+                        <input type="search" class="form-control" placeholder="Seach Your Task Here.." aria-label="Search Task" aria-describedby="addon-wrapping" />
+                        <span class="input-group-text" id="addon-wrapping">
+                          <i class="fa fa-search"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <!-- cards  -->
+                <section class="mt-3">
+                      <div class="row Task_card_container"></div>
+                </section>
+              </div>
+
+              <!-- Scripts -->
+              <script src="script.js"></script>
+              <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+              <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+              <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+      </body>
 </html>
