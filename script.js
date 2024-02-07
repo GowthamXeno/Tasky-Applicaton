@@ -1,13 +1,5 @@
 const state = {
-  TaskList: [
-    // {
-    //   id: "2020202020",
-    //   url: "https://wallpapercave.com/wp/wp5493583.jpg",
-    //   title: "Bike",
-    //   description: "This is an Description",
-    //   type: "test badge!",
-    // },
-  ],
+  TaskList: [],
 };
 
 //Dom Operation
@@ -28,8 +20,9 @@ const HtmlTaskContent = ({ id, title, description, type, url }) => `
 
                     <div class="Task_Image card-body">
                         ${
-                          url &&
-                          `<img src=${url} alt="Card Image" class="card-img-top md-3 rounded-lg" width="100%" />`
+                          url
+                            ? `<img src=${url} alt="Card Image" class='img-fluid place__holder__image mb-3' width="100%" />`
+                            : `<img src="https://t3.ftcdn.net/jpg/02/48/42/64/240_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg" alt="Card Image" class='img-fluid place__holder__image mb-3' width="100%" />`
                         }
                     </div>
                     <h2 class="card-title Task_Card_Title ms-2">${title}</h2>
@@ -50,8 +43,9 @@ const HtmlModalContent = ({ id, title, description, type, url }) => {
   return `
     <div>
     ${
-      url &&
-      `<img src=${url} alt="Card Image" class='img-fluid place__holder__image mb-3' width="100%" />`
+      url
+        ? `<img src=${url} alt="Card Image" class='img-fluid place__holder__image mb-3' width="100%" />`
+        : `<img src="https://t3.ftcdn.net/jpg/02/48/42/64/240_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg" alt="Card Image" class='img-fluid place__holder__image mb-3' width="100%" />`
     }
     <strong class="text-muted text-sm">Created on: ${date.toDateString()}</strong>
     <h2 class="my-3">${title}</h2>
@@ -194,4 +188,17 @@ const saveEdit = (e) => {
   Submitbtn.setAttribute("onclick", "openTask.apply(this,arguments)");
 };
 
+const SearchTask = (e) => {
+  if (!e) e = window.event;
 
+  while (TaskCardBody.firstChild) {
+    TaskCardBody.removeChild(TaskCardBody.firstChild);
+  }
+  const FilteredData = state.TaskList.filter(({ title }) =>
+    title.toLowerCase().includes(e.target.value.toLowerCase())
+  );
+  console.log(FilteredData);
+  FilteredData.map((CardData) => {
+    TaskCardBody.insertAdjacentHTML("beforeend",HtmlTaskContent(CardData));
+  });
+};

@@ -14,15 +14,15 @@ body{
 
 .AddBtn_small_Screen{
     position: fixed;
-    bottom:0;
-    right:0;
+    bottom:40px;
+    right:40px;
     padding: 15px 12px;
     background-color: white;
     /* width: 100%; */
     z-index: 3;
     display:flex !important;
 }
-@media screen and (min-width:800px){
+@media screen and (min-width:900px){
     .AddBtn_small_Screen{
         display: none !important;
     }

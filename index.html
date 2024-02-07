@@ -50,7 +50,7 @@
 
                         <!-- Task Description  -->
                         <div class="mb-3">
-                          <label for="TaskDesc" class="form-label">Task Type</label>
+                          <label for="TaskDesc" class="form-label">Task Description</label>
                           <textarea type="text" class="form-control" id="TaskDesc"  placeholder="Task Description..." required rows="3" ></textarea>
                         </div>
                         
@@ -64,12 +64,6 @@
                   </div>
                 </div>
               </div>
-
-              <!-- Task Modal  -->
-              <!-- Button trigger modal -->
-              <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#TaskCardModal"  >
-                Launch demo modal
-              </button> -->
 
               <!-- Task Modal Container -->
               <div class="modal fade" id="TaskCardModal" tabindex="-1" aria-labelledby="TaskCardModelLabel" aria-hidden="true">
@@ -115,7 +109,7 @@
                   <div class="row  justify-content-center">
                     <div class="col-md-6">
                       <div class="input-group flex-nowrap shadow-lg rounded">
-                        <input type="search" class="form-control" placeholder="Seach Your Task Here.." aria-label="Search Task" aria-describedby="addon-wrapping" />
+                        <input type="search" class="form-control" oninput="SearchTask.apply(this, arguments)" placeholder="Seach Your Task Here.." aria-label="Search Task" aria-describedby="addon-wrapping" />
                         <span class="input-group-text" id="addon-wrapping">
                           <i class="fa fa-search"></i>
                         </span>
